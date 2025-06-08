@@ -3,7 +3,8 @@ library(magrittr)
 library(stringi)
 library(pracma)
 library(nnls)
-set.seed(23L)
+randomSeed <- 43L
+set.seed(randomSeed)
 #Order for binary coding of cases is (desktop OR laptop) - (smartphone) - (tablet) - (other)
 #For example, n.0000 is the case of owning none of those devices at all.
 #n.1000 would be someone owns at least one (desktop OR laptop) and nothing else.
@@ -44,6 +45,7 @@ for(j in 1:nTrials)
   list.reconciledDf <- list()
   for(i in 1:N)
   {
+    time.start <- tic()
     printString <- df.n %>% slice(i) %>% mutate(printString = paste0(county,", ",state)) %>% pull(printString)
     
     sprintf("i = %d, %s",i,printString) %>% print()
@@ -61,10 +63,11 @@ for(j in 1:nTrials)
     reconciled.df %<>% pivot_wider(names_from = name,values_from = value)
     reconciled.df %<>% left_join(y = df.n,by = c("county","state"))
     reconciled.df %<>% add_column(solution.nnls = list(output.nnls))
+    reconciled.df %<>% add_column(time.elapsed = toc())
     list.reconciledDf[[i]] <- reconciled.df
   }
   list.reconciledDf %<>% bind_rows()
-  outputFileName <- sprintf("output_sampleIndex_%d.rds",j)
+  outputFileName <- sprintf("output_sampleIndex_%d_seed_%d.rds",j,randomSeed)
   write_rds(x = list.reconciledDf,file = paste0(outputFolder_outputResultsSamples,outputFileName))
 }
 
