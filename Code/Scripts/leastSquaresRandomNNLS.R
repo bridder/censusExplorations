@@ -3,7 +3,7 @@ library(magrittr)
 library(stringi)
 library(pracma)
 library(nnls)
-randomSeed <- 43L
+randomSeed <- 7789L
 set.seed(randomSeed)
 #Order for binary coding of cases is (desktop OR laptop) - (smartphone) - (tablet) - (other)
 #For example, n.0000 is the case of owning none of those devices at all.
@@ -25,8 +25,8 @@ A <- matrix(data = c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
                      1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L),ncol = 16L,byrow = TRUE)
 
 
-nTrials <- 2L
-outputFolder_outputResultsSamples <- "/media/haxor_elite/ExtraDrive1/computerCensusData/UQTypeOwnership/inputSamples/6_7_2025/outputResultsSamples/"
+nTrials <- 150L
+outputFolder_outputResultsSamples <- "/media/haxor_elite/ExtraDrive1/computerCensusData/UQTypeOwnership/inputSamples/6_9_2025/outputResultsSamples/"
 dir.create(path = outputFolder_outputResultsSamples,recursive = TRUE)
 for(j in 1:nTrials)
 {
@@ -62,8 +62,9 @@ for(j in 1:nTrials)
     reconciled.df %<>% add_column(sampleIndex = j) %>% relocate(sampleIndex,.after = state)
     reconciled.df %<>% pivot_wider(names_from = name,values_from = value)
     reconciled.df %<>% left_join(y = df.n,by = c("county","state"))
-    reconciled.df %<>% add_column(solution.nnls = list(output.nnls))
+    reconciled.df %<>% add_column(convergenceFlag.nnls = output.nnls$mode)
     reconciled.df %<>% add_column(time.elapsed = toc())
+    reconciled.df %<>% add_column(x.solution = list(x.solution))
     list.reconciledDf[[i]] <- reconciled.df
   }
   list.reconciledDf %<>% bind_rows()
