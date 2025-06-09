@@ -1,0 +1,17 @@
+value,key
+n.0000,No computing devices
+n.0001,Only an “other”
+n.0010,Only a tablet
+n.0011,Other + Tablet
+n.0100,Smartphone Only
+n.0101,Smartphone + Other
+n.0110,Smartphone + Tablet
+n.0111,All but DT/LT
+n.1000,DT/LT only
+n.1001,DT/LT + Other
+n.1010,DT/LT + Tablet
+n.1011,DT/LT + Tablet + Other
+n.1100,DT/LT + Smartphone
+n.1101,DT/LT + Smartphone + Other
+n.1110,DT/LT + Smartphone + Tablet
+n.1111,All
