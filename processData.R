@@ -19,7 +19,7 @@ df.reconciledPivotLonger <- df %>% mutate(x.solution = map(.x = x.solution,
 
 keyTable <- read_csv("SupportData/computerOwnershipKeyTable.csv",col_types = "cc")
 
-df.plot <- df.reconciledPivotLonger %>% filter(state == "Wisconsin",county == "Milwaukee County")
+df.plot <- df.reconciledPivotLonger %>% filter(state == "Indiana",county == "White County")
 
 df.plot %<>% left_join(y = keyTable,by = join_by("reconciledEstimate" == "value"))
 df.plot %<>% select(-reconciledEstimate)
